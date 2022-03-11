@@ -37,6 +37,18 @@ RUN wget https://zlib.net/pigz/pigz-2.7.tar.gz && \
     cd pigz-2.7 && \
     make
 
+#spring
+FROM debian:buster as spring
+WORKDIR /build
+RUN apt-get update && apt-get install -y make cmake g++ zlib1g-dev  wget
+RUN wget https://github.com/shubhamchandak94/Spring/archive/refs/tags/v1.0.1.tar.gz && \
+    tar -xzvf v1.0.1.tar.gz && \
+    cd Spring-1.0.1 && \
+    mkdir -p build && \
+    cd build && \
+    cmake .. && \
+    make
+
 FROM python:3.8-buster as jre
 RUN apt-get update && \
     apt-get install -y --no-install-recommends default-jre && \
@@ -49,6 +61,7 @@ COPY --from=debian /build/hmmer /opt/hmmer
 COPY --from=debian /build/skewer /usr/local/bin/
 COPY --from=fastqc /build/FastQC /opt/fastqc
 COPY --from=pigz /build/pigz-2.7/pigz /usr/local/bin/pigz
+COPY --from=spring /build/Spring-1.0.1/build/spring /usr/local/bin/spring
 
 RUN chmod ugo+x /opt/fastqc/fastqc && \
     ln -fs /opt/fastqc/fastqc /usr/local/bin/fastqc && \
