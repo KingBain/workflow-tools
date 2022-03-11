@@ -37,7 +37,7 @@ RUN wget https://zlib.net/pigz/pigz-2.7.tar.gz && \
     cd pigz-2.7 && \
     make
 
-#spring
+#Spring
 FROM debian:buster as spring
 WORKDIR /build
 RUN apt-get update && apt-get install -y make cmake g++ zlib1g-dev  wget
