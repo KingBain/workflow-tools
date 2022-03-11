@@ -32,9 +32,9 @@ RUN wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.
 FROM debian:buster as pigz
 WORKDIR /build
 RUN apt-get update && apt-get install -y make gcc zlib1g-dev wget
-RUN wget https://zlib.net/pigz/pigz-2.6.tar.gz && \
-    tar -xzvf pigz-2.6.tar.gz && \
-    cd pigz-2.6 && \
+RUN wget https://zlib.net/pigz/pigz-2.7.tar.gz && \
+    tar -xzvf pigz-2.7.tar.gz && \
+    cd pigz-2.7 && \
     make
 
 FROM python:3.8-buster as jre
@@ -48,7 +48,7 @@ COPY --from=bowtie /build/bowtie2/* /usr/local/bin/
 COPY --from=debian /build/hmmer /opt/hmmer
 COPY --from=debian /build/skewer /usr/local/bin/
 COPY --from=fastqc /build/FastQC /opt/fastqc
-COPY --from=pigz /build/pigz-2.6/pigz /usr/local/bin/pigz
+COPY --from=pigz /build/pigz-2.7/pigz /usr/local/bin/pigz
 
 RUN chmod ugo+x /opt/fastqc/fastqc && \
     ln -fs /opt/fastqc/fastqc /usr/local/bin/fastqc && \
